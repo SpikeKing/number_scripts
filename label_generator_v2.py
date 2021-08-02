@@ -123,7 +123,7 @@ class LabelGeneratorV2(object):
 
         pool = Pool(processes=100)
         for idx, row in data.iterrows():
-            print('-' * 100)
+            # print('-' * 100)
             # LabelGeneratorV2.process_line(idx, row, self.out_file)
             pool.apply_async(LabelGeneratorV2.process_line, (idx, row, self.out_file))
             # num_count += 1
