@@ -16,7 +16,7 @@ from root_dir import DATA_DIR
 
 class LabelGeneratorV2(object):
     def __init__(self):
-        file_name = "706d7791-b96c-4524-b116-aa6af45f7e24_166344"
+        file_name = "3d30b85f-5318-4bbb-ab1b-7262ad74fd7c_166330"
         self.file_path = os.path.join(DATA_DIR, "numbers_files", "{}.csv".format(file_name))
         self.out_file_path = os.path.join(
             DATA_DIR, 'numbers_files', '{}.out-{}.txt'.format(file_name, get_current_time_str()))
