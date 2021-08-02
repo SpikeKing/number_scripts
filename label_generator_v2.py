@@ -4,10 +4,9 @@
 Copyright (c) 2021. All rights reserved.
 Created by C. L. Wang on 2.8.21
 """
-import os
-import sys
 from multiprocessing.pool import Pool
 from urllib.parse import unquote
+
 import cv2
 import pandas
 
@@ -17,10 +16,10 @@ from root_dir import DATA_DIR
 
 class LabelGeneratorV2(object):
     def __init__(self):
-        self.file_name = os.path.join(DATA_DIR, "numbers_files", "706d7791-b96c-4524-b116-aa6af45f7e24_166344.csv")
-        self.out_file = os.path.join(
-            DATA_DIR, 'numbers_files',
-            '706d7791-b96c-4524-b116-aa6af45f7e24_166344.out-{}.txt'.format(get_current_time_str()))
+        file_name = "706d7791-b96c-4524-b116-aa6af45f7e24_166344"
+        self.file_path = os.path.join(DATA_DIR, "numbers_files", "{}.csv".format(file_name))
+        self.out_file_path = os.path.join(
+            DATA_DIR, 'numbers_files', '{}.out-{}.txt'.format(file_name, get_current_time_str()))
 
     @staticmethod
     def get_center_img(img_rgb):
@@ -116,7 +115,7 @@ class LabelGeneratorV2(object):
         print('[Info] 处理完成: {}'.format(idx))
 
     def process(self):
-        data = pandas.read_csv(self.file_name)
+        data = pandas.read_csv(self.file_path)
         print("[Info] 样本数: {}".format(data.shape[0]))
         num_error = 0
         num_count = 0
@@ -125,7 +124,7 @@ class LabelGeneratorV2(object):
         for idx, row in data.iterrows():
             # print('-' * 100)
             # LabelGeneratorV2.process_line(idx, row, self.out_file)
-            pool.apply_async(LabelGeneratorV2.process_line, (idx, row, self.out_file))
+            pool.apply_async(LabelGeneratorV2.process_line, (idx, row, self.out_file_path))
             # num_count += 1
             # if idx == 100:
             #     break
