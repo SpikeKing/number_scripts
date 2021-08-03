@@ -16,8 +16,10 @@ class ServicesVersus(object):
     对比模型
     """
     def __init__(self):
-        self.file_name = os.path.join(DATA_DIR, 'numbers_files', 'clean_num_and_op_test.txt')
-        self.out_file = os.path.join(DATA_DIR, 'clean_num_and_op_test.vs-{}.txt'.format(get_current_time_str()))
+        self.file_name = os.path.join(DATA_DIR, 'numbers_files',
+                                      'a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.txt')
+        self.out_file = os.path.join(DATA_DIR, 
+                                     'a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-{}.txt'.format(get_current_time_str()))
 
     @staticmethod
     def predict_danjing(img_url):
