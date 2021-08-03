@@ -16,7 +16,7 @@ from root_dir import DATA_DIR
 
 class LabelGeneratorV2(object):
     def __init__(self):
-        file_name = "3d30b85f-5318-4bbb-ab1b-7262ad74fd7c_166330"
+        file_name = "4c0e0406-cd33-4b90-8607-ad87f5d27e1a_166332"
         self.file_path = os.path.join(DATA_DIR, "numbers_files", "{}.csv".format(file_name))
         self.out_file_path = os.path.join(
             DATA_DIR, 'numbers_files', '{}.out-{}.txt'.format(file_name, get_current_time_str()))
@@ -133,10 +133,25 @@ class LabelGeneratorV2(object):
         print('[Info] error: {}, count: {}, 错误率: {}'
               .format(num_error, num_count, safe_div(num_error, num_count)))
 
+    @staticmethod
+    def split_train_test():
+        file_name = os.path.join(DATA_DIR, 'numbers_files', "numbers_dataset_v1.out-20210802170953.txt")
+        train_file = os.path.join(DATA_DIR, 'numbers_files', "numbers_dataset_v1_train.txt")
+        test_file = os.path.join(DATA_DIR, 'numbers_files', "numbers_dataset_v1_test.txt")
+        data_lines = read_file(file_name)
+        random.seed(47)
+        random.shuffle(data_lines)
+        test_lines = data_lines[:1000]
+        train_lines = data_lines[1000:]
+        write_list_to_file(train_file, train_lines)
+        write_list_to_file(test_file, test_lines)
+
+
 
 def main():
     lg = LabelGeneratorV2()
-    lg.process()
+    # lg.process()
+    lg.split_train_test()
 
 
 if __name__ == '__main__':
