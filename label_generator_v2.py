@@ -130,8 +130,8 @@ class LabelGeneratorV2(object):
             # LabelGeneratorV2.process_line(idx, row, self.out_file_path)
             pool.apply_async(LabelGeneratorV2.process_line, (idx, row, self.out_file_path))
             # num_count += 1
-            if idx == 1000:
-                break
+            # if idx == 1000:
+            #     break
         pool.close()
         pool.join()
         print('[Info] error: {}, count: {}, 错误率: {}'
