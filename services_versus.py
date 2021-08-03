@@ -45,6 +45,7 @@ class ServicesVersus(object):
             print('[Info] idx: {}'.format(data_idx))
 
     def process(self):
+        print('[Info] file_path: {}'.format(self.file_path))
         data_lines = read_file(self.file_path)
         print('[Info] 样本数: {}'.format(len(data_lines)))
         pool = Pool(processes=40)
