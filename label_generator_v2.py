@@ -104,8 +104,8 @@ class LabelGeneratorV2(object):
         label_info = json.loads(data_row["回答内容"])
         radio_1 = label_info['radio_1']
         input_1 = label_info['input_1']
-        img_url = data_info[1]
-        img_label = data_info[2]
+        img_url = data_info[0]
+        img_label = data_info[1]
         # new_img_name = "{}-idx-{}.jpg".format(ds_name, str(idx).zfill(6))
         new_img_name = "{}.jpg".format(str(idx).zfill(6))
         new_img_url = LabelGeneratorV2.format_url(img_url, new_img_name)
