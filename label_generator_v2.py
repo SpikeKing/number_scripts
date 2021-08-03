@@ -16,7 +16,8 @@ from root_dir import DATA_DIR
 
 class LabelGeneratorV2(object):
     def __init__(self):
-        file_name = "4c0e0406-cd33-4b90-8607-ad87f5d27e1a_166332"
+        # file_name = "4c0e0406-cd33-4b90-8607-ad87f5d27e1a_166332"
+        file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274"
         self.file_path = os.path.join(DATA_DIR, "numbers_files", "{}.csv".format(file_name))
         self.out_file_path = os.path.join(
             DATA_DIR, 'numbers_files', '{}.out-{}.txt'.format(file_name, get_current_time_str()))
@@ -102,8 +103,8 @@ class LabelGeneratorV2(object):
         label_info = json.loads(data_row["回答内容"])
         radio_1 = label_info['radio_1']
         input_1 = label_info['input_1']
-        img_url = data_info[0]
-        img_label = data_info[1]
+        img_url = data_info[1]
+        img_label = data_info[2]
         new_img_name = "{}.jpg".format(str(idx).zfill(6))
         new_img_url = LabelGeneratorV2.format_url(img_url, new_img_name)
         new_img_label = LabelGeneratorV2.format_label(img_label)
@@ -123,11 +124,11 @@ class LabelGeneratorV2(object):
         pool = Pool(processes=100)
         for idx, row in data.iterrows():
             # print('-' * 100)
-            # LabelGeneratorV2.process_line(idx, row, self.out_file)
+            # LabelGeneratorV2.process_line(idx, row, self.out_file_path)
             pool.apply_async(LabelGeneratorV2.process_line, (idx, row, self.out_file_path))
             # num_count += 1
-            # if idx == 100:
-            #     break
+            if idx == 1000:
+                break
         pool.close()
         pool.join()
         print('[Info] error: {}, count: {}, 错误率: {}'
@@ -150,8 +151,8 @@ class LabelGeneratorV2(object):
 
 def main():
     lg = LabelGeneratorV2()
-    # lg.process()
-    lg.split_train_test()
+    lg.process()
+    # lg.split_train_test()
 
 
 if __name__ == '__main__':
