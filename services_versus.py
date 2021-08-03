@@ -16,10 +16,11 @@ class ServicesVersus(object):
     对比模型
     """
     def __init__(self):
-        self.file_name = os.path.join(DATA_DIR, 'numbers_files',
-                                      'a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.txt')
-        self.out_file = os.path.join(DATA_DIR,
-                                     'a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-{}.txt'.format(get_current_time_str()))
+        # file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-20210803150735"
+        # file_name = "clean_num_and_op_test"
+        file_name = "numbers_dataset_v1_test"
+        self.file_path = os.path.join(DATA_DIR, 'numbers_files', '{}.txt'.format(file_name))
+        self.out_file_path = os.path.join(DATA_DIR, '{}.vs-{}.txt'.format(file_name, get_current_time_str()))
 
     @staticmethod
     def predict_danjing(img_url):
@@ -39,21 +40,21 @@ class ServicesVersus(object):
         res2 = ServicesVersus.predict_v1(img_url)
         if res1 != res2:
             print('[Info] res1: {}, res2: {}, img_url: {}'.format(res1, res2, img_url))
-        write_line(out_file, ",".join([res1, res2, img_url]))
+            write_line(out_file, ",".join([res1, res2, img_url]))
         if data_idx % 100 == 0:
             print('[Info] idx: {}'.format(data_idx))
 
     def process(self):
-        data_lines = read_file(self.file_name)
+        data_lines = read_file(self.file_path)
         print('[Info] 样本数: {}'.format(len(data_lines)))
         pool = Pool(processes=40)
         for data_idx, data_line in enumerate(data_lines):
             img_url = data_line.split("\t")[0]
-            # ServicesVersus.process_line(data_idx, img_url, self.out_file)
-            pool.apply_async(ServicesVersus.process_line, (data_idx, img_url, self.out_file))
+            ServicesVersus.process_line(data_idx, img_url, self.out_file_path)
+            # pool.apply_async(ServicesVersus.process_line, (data_idx, img_url, self.out_file_path))
         pool.close()
         pool.join()
-        print('[Info] 全部处理完成! {}'.format(self.file_name))
+        print('[Info] 全部处理完成! {}'.format(self.out_file_path))
 
 
 def main():
