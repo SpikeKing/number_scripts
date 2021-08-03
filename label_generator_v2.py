@@ -118,6 +118,7 @@ class LabelGeneratorV2(object):
         print('[Info] 处理完成: {}'.format(idx))
 
     def process(self):
+        print('[Info] file_path: {}'.format(self.file_path))
         data = pandas.read_csv(self.file_path)
         print("[Info] 样本数: {}".format(data.shape[0]))
         num_error = 0
