@@ -16,8 +16,8 @@ from root_dir import DATA_DIR
 
 class LabelGeneratorV2(object):
     def __init__(self):
-        # file_name = "4c0e0406-cd33-4b90-8607-ad87f5d27e1a_166332"
-        file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274"
+        file_name = "4c0e0406-cd33-4b90-8607-ad87f5d27e1a_166332"
+        # file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274"
         self.file_path = os.path.join(DATA_DIR, "numbers_files", "{}.csv".format(file_name))
         self.out_file_path = os.path.join(
             DATA_DIR, 'numbers_files', '{}.out-{}.txt'.format(file_name, get_current_time_str()))
@@ -99,14 +99,15 @@ class LabelGeneratorV2(object):
         """
         处理单行数据
         """
-        ds_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274"
+        # ds_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274"
         data_info = json.loads(data_row["问题内容"])
         label_info = json.loads(data_row["回答内容"])
         radio_1 = label_info['radio_1']
         input_1 = label_info['input_1']
         img_url = data_info[1]
         img_label = data_info[2]
-        new_img_name = "{}-idx-{}.jpg".format(ds_name, str(idx).zfill(6))
+        # new_img_name = "{}-idx-{}.jpg".format(ds_name, str(idx).zfill(6))
+        new_img_name = "{}.jpg".format(str(idx).zfill(6))
         new_img_url = LabelGeneratorV2.format_url(img_url, new_img_name)
         new_img_label = LabelGeneratorV2.format_label(img_label)
         if not new_img_label:
