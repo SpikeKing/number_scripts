@@ -18,7 +18,7 @@ class ServicesVersus(object):
     def __init__(self):
         self.file_name = os.path.join(DATA_DIR, 'numbers_files',
                                       'a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.txt')
-        self.out_file = os.path.join(DATA_DIR, 
+        self.out_file = os.path.join(DATA_DIR,
                                      'a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-{}.txt'.format(get_current_time_str()))
 
     @staticmethod
@@ -39,7 +39,7 @@ class ServicesVersus(object):
         res2 = ServicesVersus.predict_v1(img_url)
         if res1 != res2:
             print('[Info] res1: {}, res2: {}, img_url: {}'.format(res1, res2, img_url))
-            write_line(out_file, ",".join([res1, res2, img_url]))
+        write_line(out_file, ",".join([res1, res2, img_url]))
         if data_idx % 100 == 0:
             print('[Info] idx: {}'.format(data_idx))
 
