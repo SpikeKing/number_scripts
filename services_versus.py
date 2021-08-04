@@ -18,7 +18,7 @@ class ServicesVersus(object):
     def __init__(self):
         # file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-20210803150735"
         # file_name = "clean_num_and_op_test"
-        file_name = "numbers_dataset_v1_test"
+        file_name = "clean_hw_numbers_v1_test"
         self.file_path = os.path.join(DATA_DIR, 'numbers_files', '{}.txt'.format(file_name))
         self.out_file_path = os.path.join(DATA_DIR, '{}.vs-{}.txt'.format(file_name, get_current_time_str()))
 
@@ -35,12 +35,19 @@ class ServicesVersus(object):
         return ocr_text
 
     @staticmethod
+    def predict_v1_1(img_url):
+        res_dict = get_hw_numbers_service(img_url, service_name="uKEda8PCd5m2daQmPCe8tC")
+        ocr_text = res_dict['data']['ocr_text']
+        return ocr_text
+
+    @staticmethod
     def process_line(data_idx, img_url, out_file):
         res1 = ServicesVersus.predict_danjing(img_url)
         res2 = ServicesVersus.predict_v1(img_url)
-        if res1 != res2:
-            print('[Info] res1: {}, res2: {}, img_url: {}'.format(res1, res2, img_url))
-            write_line(out_file, ",".join([res1, res2, img_url]))
+        res3 = ServicesVersus.predict_v1_1(img_url)
+        if res1 != res2 and res2 != res3 and res1 != res3:
+            print('[Info] res1: {}, res2: {}, res3: {}, img_url: {}'.format(res1, res2, res3, img_url))
+            write_line(out_file, ",".join([res1, res2, res3, img_url]))
         if data_idx % 100 == 0:
             print('[Info] idx: {}'.format(data_idx))
 
