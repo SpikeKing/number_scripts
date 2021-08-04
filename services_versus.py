@@ -45,7 +45,7 @@ class ServicesVersus(object):
         res1 = ServicesVersus.predict_danjing(img_url)
         res2 = ServicesVersus.predict_v1(img_url)
         res3 = ServicesVersus.predict_v1_1(img_url)
-        if res1 != res2 and res2 != res3 and res1 != res3:
+        if res1 != res2 or res2 != res3 or res1 != res3:
             print('[Info] res1: {}, res2: {}, res3: {}, img_url: {}'.format(res1, res2, res3, img_url))
             write_line(out_file, ",".join([res1, res2, res3, img_url]))
         if data_idx % 100 == 0:
