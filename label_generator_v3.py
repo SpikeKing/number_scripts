@@ -100,13 +100,16 @@ class LabelGeneratorV3(object):
         """
         处理单行数据
         """
-        new_img_name = "v1-{}-{}.jpg".format(get_current_day_str(), str(idx).zfill(6))
-        new_img_url = LabelGeneratorV3.format_url(img_url, new_img_name)
-        new_img_label = LabelGeneratorV3.format_label(img_label)
-        if not new_img_label:
-            return
-        write_line(out_file, "{}\t{}".format(new_img_url, new_img_label))
-        print('[Info] 处理完成: {}'.format(idx))
+        try:
+            new_img_name = "v1-{}-{}.jpg".format(get_current_day_str(), str(idx).zfill(6))
+            new_img_url = LabelGeneratorV3.format_url(img_url, new_img_name)
+            new_img_label = LabelGeneratorV3.format_label(img_label)
+            if not new_img_label:
+                return
+            write_line(out_file, "{}\t{}".format(new_img_url, new_img_label))
+            print('[Info] 处理完成: {}'.format(idx))
+        except Exception as e:
+            print('[Info] 处理失败: {}'.format(idx))
 
     def process(self):
         print('[Info] file_path: {}'.format(self.file_path))
@@ -196,7 +199,8 @@ class LabelGeneratorV3(object):
         pool = Pool(processes=100)
         for img_idx, img_url in enumerate(res_label_dict.keys()):
             img_label = res_label_dict[img_url]
-            LabelGeneratorV3.process_line(img_idx, img_url, img_label, self.out_file_path)
+            # LabelGeneratorV3.process_line(img_idx, img_url, img_label, self.out_file_path)
+            pool.apply_async(LabelGeneratorV3.process_line, (img_idx, img_url, img_label, self.out_file_path))
             # if img_idx == 10:
             #     break
         pool.close()
