@@ -15,10 +15,11 @@ from x_utils.vpf_sevices import get_hw_numbers_service
 class DatasetEvaluation(object):
     def __init__(self):
         self.file_path = os.path.join(DATA_DIR, "numbers_files", 'clean_hw_numbers_v1_train.txt')
+        time_str = get_current_time_str()
         self.out_file_path = os.path.join(
-            DATA_DIR, "numbers_files", 'clean_hw_numbers_v1_train.out-{}.txt'.format(get_current_time_str()))
+            DATA_DIR, "numbers_files", 'clean_hw_numbers_v1_train.out-{}.txt'.format(time_str))
         self.diff_file_path = os.path.join(
-            DATA_DIR, "numbers_files", 'clean_hw_numbers_v1_train.diff-{}.txt'.format(get_current_time_str()))
+            DATA_DIR, "numbers_files", 'clean_hw_numbers_v1_train.diff-{}.txt'.format(time_str))
 
     @staticmethod
     def predict_danjing(img_url):
@@ -46,7 +47,8 @@ class DatasetEvaluation(object):
         img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
                                   "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
         if res1 != label_str or res2 != label_str or res3 != label_str:
-            print('[Info] res1: {}, res2: {}, res3: {}, img_url: {}'.format(res1, res2, res3, img_url))
+            print('[Info] label_str: {} res1: {}, res2: {}, res3: {}, img_url: {}'
+                  .format(label_str, res1, res2, res3, img_url))
             write_line(diff_file_path, ",".join([res1, res2, res3, img_url]))
         else:
             write_line(out_file_path, "\t".join([img_url, label_str]))
@@ -63,7 +65,7 @@ class DatasetEvaluation(object):
             img_url = items[0]
             label_str = items[1]
             # DatasetEvaluation.process_line(data_idx, img_url, label_str, self.out_file_path, self.diff_file_path)
-            pool.apply_async(DatasetEvaluation.process_line, 
+            pool.apply_async(DatasetEvaluation.process_line,
                              (data_idx, img_url, label_str, self.out_file_path, self.diff_file_path))
         pool.close()
         pool.join()
