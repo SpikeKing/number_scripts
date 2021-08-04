@@ -45,6 +45,8 @@ class ServicesVersus(object):
         res1 = ServicesVersus.predict_danjing(img_url)
         res2 = ServicesVersus.predict_v1(img_url)
         res3 = ServicesVersus.predict_v1_1(img_url)
+        img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
+                                  "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
         if res1 != res2 or res2 != res3 or res1 != res3:
             print('[Info] res1: {}, res2: {}, res3: {}, img_url: {}'.format(res1, res2, res3, img_url))
             write_line(out_file, ",".join([res1, res2, res3, img_url]))
