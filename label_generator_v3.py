@@ -59,12 +59,13 @@ class LabelGeneratorV3(object):
         return img_rgb[y:y+h, x:x+w]
 
     @staticmethod
-    def save_img_path(img_bgr, img_name):
+    def save_img_path(img_bgr, img_name, oss_root_dir=""):
         """
         上传图像
         """
         from x_utils.oss_utils import save_img_2_oss
-        oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v1/"
+        if not oss_root_dir:
+            oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v1/"
         img_url = save_img_2_oss(img_bgr, img_name, oss_root_dir)
         return img_url
 
@@ -225,24 +226,53 @@ class LabelGeneratorV3(object):
 
     @staticmethod
     def split_train_test():
-        file_name = os.path.join(DATA_DIR, 'numbers_files', "numbers_dataset_v1.out-20210802170953.txt")
-        train_file = os.path.join(DATA_DIR, 'numbers_files', "numbers_dataset_v1_train.txt")
-        test_file = os.path.join(DATA_DIR, 'numbers_files', "numbers_dataset_v1_test.txt")
-        data_lines = read_file(file_name)
+        file1_name = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v1.txt")
+        file2_name = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v1_1.txt")
+        train_file = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v1_train.txt")
+        test_file = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v1_test.txt")
+        data1_lines = read_file(file1_name)
+        data2_lines = read_file(file2_name)
+        data_lines = data1_lines + data2_lines
         random.seed(47)
         random.shuffle(data_lines)
-        test_lines = data_lines[:1000]
-        train_lines = data_lines[1000:]
+        test_lines = data_lines[:2000]
+        train_lines = data_lines[2000:]
         write_list_to_file(train_file, train_lines)
         write_list_to_file(test_file, test_lines)
 
+    @staticmethod
+    def process_line_x(img_idx, img_url, img_label, out_file, oss_root_dir):
+        _, img_bgr = download_url_img(img_url)
+        img_name = "pressed-v1-{}-{}.jpg".format(get_current_day_str(), str(img_idx).zfill(6))
+        out_url = LabelGeneratorV3.save_img_path(img_bgr, img_name, oss_root_dir)
+        write_line(out_file, "{}\t{}".format(out_url, img_label))
+        print('[Info] 处理完成: {}'.format(img_idx))
+
+    @staticmethod
+    def upload_jpg_imgs():
+        file_path = os.path.join(DATA_DIR, "numbers_files", "706d7791-b96c-4524-b116-aa6af45f7e24_166344.csv")
+        out_file = os.path.join(DATA_DIR, "numbers_files", "pressed_test_10000.txt")
+        data_dict = LabelGeneratorV3.process_file(file_path)
+        oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-ori/"
+
+        pool = Pool(processes=100)
+        for img_idx, img_url in enumerate(data_dict.keys()):
+            img_label = data_dict[img_url]
+            # LabelGeneratorV3.process_line_x(img_idx, img_url, img_label, out_file, oss_root_dir)
+            pool.apply_async(LabelGeneratorV3.process_line_x, (img_idx, img_url, img_label, out_file, oss_root_dir))
+            if img_idx == 10000 - 1:
+                break
+        pool.close()
+        pool.join()
+        print("[Info] 处理完成: {}".format(out_file))
 
 
 def main():
     lg = LabelGeneratorV3()
     # lg.process_v1()
-    lg.process_v1_1()
+    # lg.process_v1_1()
     # lg.split_train_test()
+    lg.upload_jpg_imgs()
 
 
 if __name__ == '__main__':
