@@ -95,12 +95,25 @@ class LabelGeneratorV2(object):
         return data_label
 
     @staticmethod
-    def process_line(idx, img_url, new_img_label, out_file):
+    def process_line(idx, data_row, out_file):
         """
         处理单行数据
         """
+        # ds_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274"
+        data_info = json.loads(data_row["问题内容"])
+        label_info = json.loads(data_row["回答内容"])
+        radio_1 = label_info['radio_1']
+        input_1 = label_info['input_1']
+        img_url = data_info[1]
+        img_label = data_info[2]
+        # new_img_name = "{}-idx-{}.jpg".format(ds_name, str(idx).zfill(6))
         new_img_name = "check-v1-{}-{}.jpg".format(get_current_day_str(), str(idx).zfill(6))
         new_img_url = LabelGeneratorV2.format_url(img_url, new_img_name)
+        new_img_label = LabelGeneratorV2.format_label(img_label)
+        if not new_img_label:
+            return
+        if radio_1 != "0":
+            return
         write_line(out_file, "{}\t{}".format(new_img_url, new_img_label))
         print('[Info] 处理完成: {}'.format(idx))
 
@@ -108,39 +121,21 @@ class LabelGeneratorV2(object):
         print('[Info] file_path: {}'.format(self.file_path))
         data = pandas.read_csv(self.file_path)
         print("[Info] 样本数: {}".format(data.shape[0]))
-
-        data_info_list = []
-        for idx, data_row in data.iterrows():
-            # print('-' * 100)
-            # LabelGeneratorV2.process_line(idx, row, self.out_file_path)
-            data_info = json.loads(data_row["问题内容"])
-            label_info = json.loads(data_row["回答内容"])
-            radio_1 = label_info['radio_1']
-            input_1 = label_info['input_1']
-            img_url = data_info[1]
-            img_label = data_info[2]
-            if radio_1 != "0":
-                return
-            new_img_label = LabelGeneratorV2.format_label(img_label)
-            if not new_img_label:
-                return
-            data_info_list.append([img_url, new_img_label])
-
-        print('[Info] 数据量: {}'.format(len(data_info_list)))
-
-        random.seed(47)
-        random.shuffle(data_info_list)
+        num_error = 0
+        num_count = 0
 
         pool = Pool(processes=100)
-        for data_idx, data_info in enumerate(data_info_list):
-            img_url, new_img_label = data_info
-            pool.apply_async(LabelGeneratorV2.process_line, (data_idx, img_url, new_img_label, self.out_file_path))
+        for idx, row in data.iterrows():
+            # print('-' * 100)
+            # LabelGeneratorV2.process_line(idx, row, self.out_file_path)
+            pool.apply_async(LabelGeneratorV2.process_line, (idx, row, self.out_file_path))
             # num_count += 1
-            if data_idx == 3000:
+            if idx == 3000:
                 break
         pool.close()
         pool.join()
-        print('[Info] 处理完成: {}'.format(self.out_file_path))
+        print('[Info] error: {}, count: {}, 错误率: {}'
+              .format(num_error, num_count, safe_div(num_error, num_count)))
 
     @staticmethod
     def split_train_test():
@@ -154,6 +149,7 @@ class LabelGeneratorV2(object):
         train_lines = data_lines[1000:]
         write_list_to_file(train_file, train_lines)
         write_list_to_file(test_file, test_lines)
+
 
 
 def main():
