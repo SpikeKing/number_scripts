@@ -6,6 +6,7 @@ Created by C. L. Wang on 3.8.21
 """
 from multiprocessing.pool import Pool
 
+from myutils.make_html_page import make_html_page
 from myutils.project_utils import *
 from root_dir import DATA_DIR
 from x_utils.vpf_sevices import get_hw_numbers_service
@@ -19,8 +20,10 @@ class ServicesVersus(object):
         # file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-20210803150735"
         # file_name = "clean_num_and_op_test"
         file_name = "hw_numbers_check_3000"
+        time_str = get_current_time_str()
         self.file_path = os.path.join(DATA_DIR, 'numbers_files', '{}.txt'.format(file_name))
-        self.out_file_path = os.path.join(DATA_DIR, 'numbers_files', '{}.vs-{}.txt'.format(file_name, get_current_time_str()))
+        self.out_file_path = os.path.join(DATA_DIR, 'numbers_files', '{}.vs-{}.txt'.format(file_name, time_str))
+        self.html_file_path = os.path.join(DATA_DIR, 'numbers_files', '{}.vs-{}.html'.format(file_name, time_str))
 
     @staticmethod
     def predict_danjing(img_url):
@@ -74,6 +77,16 @@ class ServicesVersus(object):
         pool.close()
         pool.join()
         print('[Info] 全部处理完成! {}'.format(self.out_file_path))
+
+        out_data_lines = read_file(self.out_file_path)
+        print('[Info] 样本数: {}'.format(len(out_data_lines)))
+        html_lines = []
+        for data_line in out_data_lines:
+            res1, res2, img_url = data_line.split(",")
+            html_lines.append([res1, res2, img_url])
+        make_html_page(self.html_file_path, html_lines)
+        print('[Info] 输出: {}'.format(self.html_file_path))
+        print('[Info] 正确率: {}'.format(safe_div(len(out_data_lines), len(data_lines))))
 
 
 def main():
