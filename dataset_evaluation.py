@@ -14,12 +14,13 @@ from x_utils.vpf_sevices import get_hw_numbers_service
 
 class DatasetEvaluation(object):
     def __init__(self):
-        self.file_path = os.path.join(DATA_DIR, "numbers_files", 'numbers_dataset_v1_train.txt')
+        file_name = "clean_hw_numbers_v1_train_good"
+        self.file_path = os.path.join(DATA_DIR, "numbers_files", '{}.txt'.format(file_name))
         time_str = get_current_time_str()
         self.out_file_path = os.path.join(
-            DATA_DIR, "numbers_files", 'numbers_dataset_v1_train.out-{}.txt'.format(time_str))
+            DATA_DIR, "numbers_files", '{}.out-{}.txt'.format(file_name, time_str))
         self.diff_file_path = os.path.join(
-            DATA_DIR, "numbers_files", 'numbers_dataset_v1_train.diff-{}.txt'.format(time_str))
+            DATA_DIR, "numbers_files", '{}.diff-{}.txt'.format(file_name, time_str))
 
     @staticmethod
     def predict_danjing(img_url):
