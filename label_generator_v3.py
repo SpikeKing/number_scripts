@@ -4,6 +4,7 @@
 Copyright (c) 2021. All rights reserved.
 Created by C. L. Wang on 2.8.21
 """
+import copy
 from multiprocessing.pool import Pool
 from urllib.parse import unquote
 
@@ -65,7 +66,7 @@ class LabelGeneratorV3(object):
         """
         from x_utils.oss_utils import save_img_2_oss
         if not oss_root_dir:
-            oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v1/"
+            oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v2/"
         img_url = save_img_2_oss(img_bgr, img_name, oss_root_dir)
         # img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
         #                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
@@ -106,7 +107,7 @@ class LabelGeneratorV3(object):
         处理单行数据
         """
         try:
-            new_img_name = "v1_1-{}-{}.jpg".format(get_current_day_str(), str(idx).zfill(6))
+            new_img_name = "v2-{}-{}.jpg".format(get_current_day_str(), str(idx).zfill(6))
             new_img_url = LabelGeneratorV3.format_url(img_url, new_img_name)
             new_img_label = LabelGeneratorV3.format_label(img_label)
             if not new_img_label:
@@ -167,19 +168,17 @@ class LabelGeneratorV3(object):
         image4_label_dict = LabelGeneratorV3.process_file(self.file4_path)
         image5_label_dict = LabelGeneratorV3.process_file_ex(self.file5_path)
 
-        res_label_dict = dict()
+        res_label_dict = copy.copy(image1_label_dict)
         for image_x_label_dict in [image2_label_dict, image3_label_dict, image4_label_dict, image5_label_dict]:
             for image_url in image_x_label_dict.keys():
-                if image_url not in image1_label_dict.keys():
-                    continue
-                label_ex1 = image1_label_dict[image_url]
-                label_ex2 = image_x_label_dict[image_url]
-                if label_ex1 != label_ex2:
+                if image_url in res_label_dict.keys():
                     continue
                 else:
+                    label_ex1 = image_x_label_dict[image_url]
                     res_label_dict[image_url] = label_ex1
-        print('[Info] 样本数: {}'.format(len(res_label_dict.keys())))
-        print('[Info] 样本数ex: {}'.format(len(image1_label_dict.keys())))
+
+        print('[Info] 样本数: {}'.format(len(image1_label_dict.keys())))
+        print('[Info] 样本数ex: {}'.format(len(res_label_dict.keys())))
 
         pool = Pool(processes=100)
         for img_idx, img_url in enumerate(res_label_dict.keys()):
@@ -200,19 +199,16 @@ class LabelGeneratorV3(object):
         image1_label_dict = LabelGeneratorV3.process_file(self.file6_path)
         image2_label_dict = LabelGeneratorV3.process_file(self.file7_path)
 
-        res_label_dict = dict()
+        res_label_dict = copy.copy(image1_label_dict)
         for image_x_label_dict in [image2_label_dict]:
             for image_url in image_x_label_dict.keys():
-                if image_url not in image1_label_dict.keys():
-                    continue
-                label_ex1 = image1_label_dict[image_url]
-                label_ex2 = image_x_label_dict[image_url]
-                if label_ex1 != label_ex2:
+                if image_url in image1_label_dict.keys():
                     continue
                 else:
+                    label_ex1 = image_x_label_dict[image_url]
                     res_label_dict[image_url] = label_ex1
-        print('[Info] 样本数: {}'.format(len(res_label_dict.keys())))
-        print('[Info] 样本数ex: {}'.format(len(image1_label_dict.keys())))
+        print('[Info] 样本数: {}'.format(len(image1_label_dict.keys())))
+        print('[Info] 样本数ex: {}'.format(len(res_label_dict.keys())))
 
         pool = Pool(processes=100)
         for img_idx, img_url in enumerate(res_label_dict.keys()):
@@ -271,10 +267,10 @@ class LabelGeneratorV3(object):
 
 def main():
     lg = LabelGeneratorV3()
-    # lg.process_v1()
+    lg.process_v1()
     # lg.process_v1_1()
     # lg.split_train_test()
-    lg.upload_jpg_imgs()
+    # lg.upload_jpg_imgs()
 
 
 if __name__ == '__main__':
