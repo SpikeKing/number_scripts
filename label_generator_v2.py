@@ -16,8 +16,8 @@ from root_dir import DATA_DIR
 
 class LabelGeneratorV2(object):
     def __init__(self):
-        file_name = "706d7791-b96c-4524-b116-aa6af45f7e24_166344"
-        # file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274"
+        # file_name = "706d7791-b96c-4524-b116-aa6af45f7e24_166344"
+        file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274"
         self.file_path = os.path.join(DATA_DIR, "numbers_files", "{}.csv".format(file_name))
         self.out_file_path = os.path.join(
             DATA_DIR, 'numbers_files', '{}.out-{}.txt'.format(file_name, get_current_time_str()))
@@ -61,7 +61,7 @@ class LabelGeneratorV2(object):
         上传图像
         """
         from x_utils.oss_utils import save_img_2_oss
-        oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v1/"
+        oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-check-v1/"
         img_url = save_img_2_oss(img_bgr, img_name, oss_root_dir)
         return img_url
 
@@ -104,10 +104,10 @@ class LabelGeneratorV2(object):
         label_info = json.loads(data_row["回答内容"])
         radio_1 = label_info['radio_1']
         input_1 = label_info['input_1']
-        img_url = data_info[0]
-        img_label = data_info[1]
+        img_url = data_info[1]
+        img_label = data_info[2]
         # new_img_name = "{}-idx-{}.jpg".format(ds_name, str(idx).zfill(6))
-        new_img_name = "{}.jpg".format(str(idx).zfill(6))
+        new_img_name = "check-v1-{}-{}.jpg".format(get_current_day_str(), str(idx).zfill(6))
         new_img_url = LabelGeneratorV2.format_url(img_url, new_img_name)
         new_img_label = LabelGeneratorV2.format_label(img_label)
         if not new_img_label:
@@ -130,8 +130,8 @@ class LabelGeneratorV2(object):
             # LabelGeneratorV2.process_line(idx, row, self.out_file_path)
             pool.apply_async(LabelGeneratorV2.process_line, (idx, row, self.out_file_path))
             # num_count += 1
-            # if idx == 1000:
-            #     break
+            if idx == 3000:
+                break
         pool.close()
         pool.join()
         print('[Info] error: {}, count: {}, 错误率: {}'

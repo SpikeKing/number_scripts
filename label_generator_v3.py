@@ -67,8 +67,8 @@ class LabelGeneratorV3(object):
         if not oss_root_dir:
             oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v1/"
         img_url = save_img_2_oss(img_bgr, img_name, oss_root_dir)
-        img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
-                                  "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
+        # img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
+        #                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
         return img_url
 
     @staticmethod
