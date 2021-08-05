@@ -224,17 +224,17 @@ class LabelGeneratorV3(object):
 
     @staticmethod
     def split_train_test():
-        file1_name = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v1.txt")
-        file2_name = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v1_1.txt")
-        train_file = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v1_train.txt")
-        test_file = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v1_test.txt")
+        file1_name = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v2_tmp1.txt")
+        file2_name = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v2_tmp2.txt")
+        train_file = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v2_train.txt")
+        test_file = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v2_test.txt")
         data1_lines = read_file(file1_name)
         data2_lines = read_file(file2_name)
         data_lines = data1_lines + data2_lines
         random.seed(47)
         random.shuffle(data_lines)
-        test_lines = data_lines[:2000]
-        train_lines = data_lines[2000:]
+        test_lines = data_lines[:1000]
+        train_lines = data_lines[1000:]
         write_list_to_file(train_file, train_lines)
         write_list_to_file(test_file, test_lines)
 
@@ -268,8 +268,8 @@ class LabelGeneratorV3(object):
 def main():
     lg = LabelGeneratorV3()
     # lg.process_v1()
-    lg.process_v1_1()
-    # lg.split_train_test()
+    # lg.process_v1_1()
+    lg.split_train_test()
     # lg.upload_jpg_imgs()
 
 
