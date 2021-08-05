@@ -130,7 +130,7 @@ class LabelGeneratorV2(object):
             # LabelGeneratorV2.process_line(idx, row, self.out_file_path)
             pool.apply_async(LabelGeneratorV2.process_line, (idx, row, self.out_file_path))
             # num_count += 1
-            if idx == 3000:
+            if idx == 2000:
                 break
         pool.close()
         pool.join()
