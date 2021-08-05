@@ -42,15 +42,18 @@ class ServicesVersus(object):
 
     @staticmethod
     def process_line(data_idx, img_url, label_str, out_file):
-        res1 = ServicesVersus.predict_danjing(img_url)
+        # res1 = ServicesVersus.predict_danjing(img_url)
         res2 = ServicesVersus.predict_v1(img_url)
-        res3 = ServicesVersus.predict_v1_1(img_url)
+        # res3 = ServicesVersus.predict_v1_1(img_url)
         # img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
         #                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
-        if res1 != label_str or res2 != label_str or res3 != label_str:
-            print('[Info] data_idx: {}, label_str: {}, res1: {}, res2: {}, res3: {}, img_url: {}'
-                  .format(data_idx, label_str, res1, res2, res3, img_url))
-            write_line(out_file, ",".join([label_str, res1, res2, res3, img_url]))
+        # if res1 != label_str or res2 != label_str or res3 != label_str:
+        #     print('[Info] data_idx: {}, label_str: {}, res1: {}, res2: {}, res3: {}, img_url: {}'
+        #           .format(data_idx, label_str, res1, res2, res3, img_url))
+        #     write_line(out_file, ",".join([label_str, res1, res2, res3, img_url]))
+        if res2 != label_str:
+            print('[Info] label_str: {}, res2: {}, img_url: {}'.format(label_str, res2, img_url))
+            write_line(out_file, ",".join([label_str, res2, img_url]))
         if data_idx % 100 == 0:
             print('[Info] idx: {}'.format(data_idx))
 
