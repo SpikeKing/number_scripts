@@ -52,7 +52,7 @@ class ServicesVersus(object):
         #           .format(data_idx, label_str, res1, res2, res3, img_url))
         #     write_line(out_file, ",".join([label_str, res1, res2, res3, img_url]))
         if res2 != label_str:
-            print('[Info] label_str: {}, res2: {}, img_url: {}'.format(label_str, res2, img_url))
+            print('[Info] data_idx: {}, label_str: {}, res2: {}, img_url: {}'.format(data_idx, label_str, res2, img_url))
             write_line(out_file, ",".join([label_str, res2, img_url]))
         if data_idx % 100 == 0:
             print('[Info] idx: {}'.format(data_idx))
