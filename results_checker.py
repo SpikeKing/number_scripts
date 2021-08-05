@@ -5,12 +5,8 @@ Copyright (c) 2021. All rights reserved.
 Created by C. L. Wang on 3.8.21
 """
 
-import os
-import sys
-
 from myutils.make_html_page import make_html_page
 from myutils.project_utils import *
-from myutils.cv_utils import *
 from root_dir import DATA_DIR
 
 

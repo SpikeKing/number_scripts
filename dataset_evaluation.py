@@ -14,12 +14,12 @@ from x_utils.vpf_sevices import get_hw_numbers_service
 
 class DatasetEvaluation(object):
     def __init__(self):
-        self.file_path = os.path.join(DATA_DIR, "numbers_files", 'clean_hw_numbers_v1_train.txt')
+        self.file_path = os.path.join(DATA_DIR, "numbers_files", 'numbers_dataset_v1_train.txt')
         time_str = get_current_time_str()
         self.out_file_path = os.path.join(
-            DATA_DIR, "numbers_files", 'clean_hw_numbers_v1_train.out-{}.txt'.format(time_str))
+            DATA_DIR, "numbers_files", 'numbers_dataset_v1_train.out-{}.txt'.format(time_str))
         self.diff_file_path = os.path.join(
-            DATA_DIR, "numbers_files", 'clean_hw_numbers_v1_train.diff-{}.txt'.format(time_str))
+            DATA_DIR, "numbers_files", 'numbers_dataset_v1_train.diff-{}.txt'.format(time_str))
 
     @staticmethod
     def predict_danjing(img_url):
@@ -44,8 +44,8 @@ class DatasetEvaluation(object):
         res1 = DatasetEvaluation.predict_danjing(img_url)
         res2 = DatasetEvaluation.predict_v1(img_url)
         res3 = DatasetEvaluation.predict_v1_1(img_url)
-        img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
-                                  "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
+        # img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
+        #                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
         if res1 != label_str or res2 != label_str or res3 != label_str:
             print('[Info] label_str: {} res1: {}, res2: {}, res3: {}, img_url: {}'
                   .format(label_str, res1, res2, res3, img_url))
@@ -72,10 +72,30 @@ class DatasetEvaluation(object):
         print('[Info] 处理完成: {}'.format(self.out_file_path))
         print('[Info] 处理完成: {}'.format(self.diff_file_path))
 
+    @staticmethod
+    def replace_host():
+        file_name = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v1_train_good.txt")
+        print('[Info] 处理文件: {}'.format(file_name))
+        out_file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v1_train_good_x.txt")
+        data_lines = read_file(file_name)
+        print('[Info] 样本数: {}'.format(len(data_lines)))
+        out_lines = []
+        for data_line in data_lines:
+            items = data_line.split("\t")
+            img_url = items[0]
+            img_label = items[1]
+            img_url = img_url.replace("https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com",
+                                      "http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com")
+            out_lines.append("\t".join([img_url, img_label]))
+        write_list_to_file(out_file_path, out_lines)
+        print('[Info] 写入完成: {}'.format(out_file_path))
+
+
 
 def main():
     de = DatasetEvaluation()
     de.process()
+    # de.replace_host()
 
 
 if __name__ == "__main__":
