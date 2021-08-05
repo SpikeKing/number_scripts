@@ -14,7 +14,7 @@ from x_utils.vpf_sevices import get_hw_numbers_service
 
 class DatasetEvaluation(object):
     def __init__(self):
-        file_name = "numbers_dataset_v1_train"
+        file_name = "clean_hw_numbers_v2_train"
         self.file_path = os.path.join(DATA_DIR, "numbers_files", '{}.txt'.format(file_name))
         time_str = get_current_time_str()
         self.out_file_path = os.path.join(
