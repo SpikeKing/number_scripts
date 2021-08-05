@@ -52,7 +52,10 @@ class ServicesVersus(object):
         #           .format(data_idx, label_str, res1, res2, res3, img_url))
         #     write_line(out_file, ",".join([label_str, res1, res2, res3, img_url]))
         if res2 != label_str:
-            print('[Info] data_idx: {}, label_str: {}, res2: {}, img_url: {}'.format(data_idx, label_str, res2, img_url))
+            img_url_show = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
+                                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
+            print('[Info] data_idx: {}, label_str: {}, res2: {}, img_url_show: {}'
+                  .format(data_idx, label_str, res2, img_url_show))
             write_line(out_file, ",".join([label_str, res2, img_url]))
         if data_idx % 100 == 0:
             print('[Info] idx: {}'.format(data_idx))
