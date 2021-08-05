@@ -14,7 +14,7 @@ from x_utils.vpf_sevices import get_hw_numbers_service
 
 class DatasetEvaluation(object):
     def __init__(self):
-        file_name = "clean_hw_numbers_v1_train_good"
+        file_name = "clean_hw_numbers_v1_test"
         self.file_path = os.path.join(DATA_DIR, "numbers_files", '{}.txt'.format(file_name))
         time_str = get_current_time_str()
         self.out_file_path = os.path.join(
@@ -42,19 +42,19 @@ class DatasetEvaluation(object):
 
     @staticmethod
     def process_line(data_idx, img_url, label_str, out_file_path, diff_file_path):
-        # res1 = DatasetEvaluation.predict_danjing(img_url)
-        # res2 = DatasetEvaluation.predict_v1(img_url)
+        res1 = DatasetEvaluation.predict_danjing(img_url)
+        res2 = DatasetEvaluation.predict_v1(img_url)
         res3 = DatasetEvaluation.predict_v1_1(img_url)
-        # img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
-        #                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
-        # if res1 != label_str or res2 != label_str or res3 != label_str:
-        #     print('[Info] label_str: {}, res1: {}, res2: {}, res3: {}, img_url: {}'
-        #           .format(label_str, res1, res2, res3, img_url))
-        #     write_line(diff_file_path, ",".join([label_str, res1, res2, res3, img_url]))
-        if res3 != label_str:
-            print('[Info] label_str: {}, res3: {}, img_url: {}'
-                  .format(label_str, res3, img_url))
-            write_line(diff_file_path, ",".join([label_str, res3, img_url]))
+        img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
+                                  "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
+        if res1 != label_str or res2 != label_str or res3 != label_str:
+            print('[Info] label_str: {}, res1: {}, res2: {}, res3: {}, img_url: {}'
+                  .format(label_str, res1, res2, res3, img_url))
+            write_line(diff_file_path, ",".join([label_str, res1, res2, res3, img_url]))
+        # if res3 != label_str:
+        #     print('[Info] label_str: {}, res3: {}, img_url: {}'
+        #           .format(label_str, res3, img_url))
+        #     write_line(diff_file_path, ",".join([label_str, res3, img_url]))
         else:
             write_line(out_file_path, "\t".join([img_url, label_str]))
         if data_idx % 100 == 0:
