@@ -82,11 +82,11 @@ class ServicesVersus(object):
         print('[Info] 样本数: {}'.format(len(out_data_lines)))
         html_lines = []
         for data_line in out_data_lines:
-            res1, res2, img_url = data_line.split(",")
-            html_lines.append([res1, res2, img_url])
+            item_list = data_line.split(",")
+            html_lines.append(item_list)
         make_html_page(self.html_file_path, html_lines)
         print('[Info] 输出: {}'.format(self.html_file_path))
-        print('[Info] 正确率: {}'.format(safe_div(len(out_data_lines), len(data_lines))))
+        print('[Info] 正确率: {}'.format(safe_div(len(data_lines)-len(out_data_lines), len(data_lines))))
 
 
 def main():
