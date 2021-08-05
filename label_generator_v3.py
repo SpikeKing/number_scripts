@@ -107,7 +107,7 @@ class LabelGeneratorV3(object):
         处理单行数据
         """
         try:
-            new_img_name = "v2-{}-{}.jpg".format(get_current_day_str(), str(idx).zfill(6))
+            new_img_name = "v2_1-{}-{}.jpg".format(get_current_day_str(), str(idx).zfill(6))
             new_img_url = LabelGeneratorV3.format_url(img_url, new_img_name)
             new_img_label = LabelGeneratorV3.format_label(img_label)
             if not new_img_label:
@@ -267,8 +267,8 @@ class LabelGeneratorV3(object):
 
 def main():
     lg = LabelGeneratorV3()
-    lg.process_v1()
-    # lg.process_v1_1()
+    # lg.process_v1()
+    lg.process_v1_1()
     # lg.split_train_test()
     # lg.upload_jpg_imgs()
 
