@@ -49,7 +49,8 @@ class DatasetOperation(object):
         len_pre_label = len(pre_label)
         len_img_label = len(img_label)
         res_label = img_label
-        if abs(len_pre_label - len_img_label) == 1:
+        other = pre_label.replace(".", "") == img_label or pre_label == img_label + "0"
+        if abs(len_pre_label - len_img_label) == 1 and other:
             res_label = pre_label if len_pre_label > len_img_label else img_label
         return res_label
 
