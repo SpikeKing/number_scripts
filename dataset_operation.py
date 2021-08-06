@@ -71,13 +71,13 @@ class DatasetOperation(object):
         print('[Info] 文本名称: {}'.format(self.file_path))
         data_lines = read_file(self.file_path)
         print('[Info] 样本数: {}'.format(len(data_lines)))
-        pool = Pool(processes=100)
+        pool = Pool(processes=40)
         for img_idx, data_line in enumerate(data_lines):
             items = data_line.split("\t")
             img_url, img_label = items
-            DatasetOperation.process_line(img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path)
-            # pool.apply_async(DatasetOperation.process_line,
-            #                  (img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path))
+            # DatasetOperation.process_line(img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path)
+            pool.apply_async(DatasetOperation.process_line,
+                             (img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path))
         pool.close()
         pool.join()
         print('[Info] 处理完成: {}'.format(self.out2_file_path))
