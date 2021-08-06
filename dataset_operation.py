@@ -74,15 +74,10 @@ class DatasetOperation(object):
         print('[Info] 文本名称: {}'.format(self.file_path))
         data_lines = read_file(self.file_path)
         print('[Info] 样本数: {}'.format(len(data_lines)))
-        label_dict = {}
-        for data_line in data_lines:
+        pool = Pool(processes=100)
+        for img_idx, data_line in enumerate(data_lines):
             items = data_line.split("\t")
-            url, label = items
-            label_dict[label] = url
-
-        pool = Pool(processes=20)
-        for img_idx, img_label in enumerate(label_dict.keys()):
-            img_url = label_dict[img_label]
+            img_url, img_label = items
             # DatasetOperation.process_line(img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path)
             pool.apply_async(DatasetOperation.process_line,
                              (img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path))
