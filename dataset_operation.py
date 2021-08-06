@@ -19,7 +19,7 @@ class DatasetOperation(object):
     清洗数据集
     """
     def __init__(self):
-        self.file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train_ori.txt')
+        self.file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.txt')
         self.out1_file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.out1.txt')
         self.out2_file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.out2.txt')
 
