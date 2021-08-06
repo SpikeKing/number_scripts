@@ -56,14 +56,18 @@ class DatasetOperation(object):
 
     @staticmethod
     def process_line(img_idx, img_url, img_label, out1_file_path, out2_file_path):
-        res_label = DatasetOperation.check_label(img_url, img_label)
-        if res_label != img_label:
-            print('[Info] img_idx: {}, img_label: {}, res_label: {}, img_url: {}'
-                  .format(img_idx, img_label, res_label, img_url))
-            write_line(out1_file_path, "{}\t{}\t{}".format(img_url, img_label, res_label))
-        write_line(out2_file_path, "{}\t{}".format(img_url, res_label))
-        if img_idx % 100 == 0:
-            print('[Info] img_idx: {}'.format(img_idx))
+        try:
+            res_label = DatasetOperation.check_label(img_url, img_label)
+            if res_label != img_label:
+                print('[Info] img_idx: {}, img_label: {}, res_label: {}, img_url: {}'
+                      .format(img_idx, img_label, res_label, img_url))
+                write_line(out1_file_path, "{}\t{}\t{}".format(img_url, img_label, res_label))
+            write_line(out2_file_path, "{}\t{}".format(img_url, res_label))
+            if img_idx % 100 == 0:
+                print('[Info] img_idx: {}'.format(img_idx))
+        except Exception as e:
+            print('[Error] e: {}'.format(e))
+            print('[Error] img_idx: {}, img_url: {}'.format(img_idx, img_url))
 
 
     def process(self):
@@ -76,7 +80,7 @@ class DatasetOperation(object):
             url, label = items
             label_dict[label] = url
 
-        pool = Pool(processes=40)
+        pool = Pool(processes=100)
         for img_idx, img_label in enumerate(label_dict.keys()):
             img_url = label_dict[img_label]
             # DatasetOperation.process_line(img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path)
