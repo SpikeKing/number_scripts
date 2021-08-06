@@ -9,7 +9,7 @@ import os
 
 from multiprocessing.pool import Pool
 
-from myutils.project_utils import read_file, write_line
+from myutils.project_utils import *
 from root_dir import DATA_DIR
 from x_utils.vpf_sevices import get_hw_numbers_service
 
@@ -20,8 +20,9 @@ class DatasetOperation(object):
     """
     def __init__(self):
         self.file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.txt')
-        self.out1_file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.out1.txt')
-        self.out2_file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.out2.txt')
+        time_str = get_current_time_str()
+        self.out1_file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.out1-{}.txt'.format(time_str))
+        self.out2_file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.out2-{}.txt'.format(time_str))
 
     @staticmethod
     def predict_danjing(img_url):
@@ -77,7 +78,7 @@ class DatasetOperation(object):
         pool = Pool(processes=40)
         for img_idx, img_label in enumerate(label_dict.keys()):
             img_url = label_dict[img_label]
-            DatasetOperation.process_line(img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path)
+            # DatasetOperation.process_line(img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path)
             pool.apply_async(DatasetOperation.process_line,
                              (img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path))
         pool.close()
