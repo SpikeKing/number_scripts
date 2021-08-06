@@ -5,8 +5,6 @@ Copyright (c) 2021. All rights reserved.
 Created by C. L. Wang on 6.8.21
 """
 
-import os
-
 from multiprocessing.pool import Pool
 
 from myutils.project_utils import *
@@ -68,7 +66,6 @@ class DatasetOperation(object):
         except Exception as e:
             print('[Error] e: {}'.format(e))
             print('[Error] img_idx: {}, img_url: {}'.format(img_idx, img_url))
-
 
     def process(self):
         print('[Info] 文本名称: {}'.format(self.file_path))
