@@ -80,7 +80,7 @@ class DatasetOperation(object):
             url, label = items
             label_dict[label] = url
 
-        pool = Pool(processes=100)
+        pool = Pool(processes=20)
         for img_idx, img_label in enumerate(label_dict.keys()):
             img_url = label_dict[img_label]
             # DatasetOperation.process_line(img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path)
