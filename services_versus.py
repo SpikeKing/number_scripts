@@ -71,12 +71,12 @@ class ServicesVersus(object):
         print('[Info] file_path: {}'.format(self.file_path))
         data_lines = read_file(self.file_path)
         print('[Info] 样本数: {}'.format(len(data_lines)))
-        pool = Pool(processes=100)
+        pool = Pool(processes=40)
         for data_idx, data_line in enumerate(data_lines):
             img_url = data_line.split("\t")[0]
             label_str = data_line.split("\t")[1]
-            ServicesVersus.process_line(data_idx, img_url, label_str, self.out_file_path)
-            # pool.apply_async(ServicesVersus.process_line, (data_idx, img_url, label_str, self.out_file_path))
+            # ServicesVersus.process_line(data_idx, img_url, label_str, self.out_file_path)
+            pool.apply_async(ServicesVersus.process_line, (data_idx, img_url, label_str, self.out_file_path))
         pool.close()
         pool.join()
         print('[Info] 全部处理完成! {}'.format(self.out_file_path))
