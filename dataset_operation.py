@@ -19,8 +19,7 @@ class DatasetOperation(object):
     def __init__(self):
         self.file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.txt')
         time_str = get_current_time_str()
-        self.out1_file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.out1-{}.txt'.format(time_str))
-        self.out2_file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.out2-{}.txt'.format(time_str))
+        self.out_file_path = os.path.join(DATA_DIR, 'numbers_files', 'relabeled.out-{}.txt'.format(time_str))
 
     @staticmethod
     def predict_danjing(img_url):
@@ -53,19 +52,16 @@ class DatasetOperation(object):
         return res_label
 
     @staticmethod
-    def process_line(img_idx, img_url, img_label, out1_file_path, out2_file_path):
+    def process_line(img_idx, img_url, img_label, out1_file_path):
         # try:
-        res_label = DatasetOperation.check_label(img_url, img_label)
-        if res_label != img_label:
-            print('[Info] img_idx: {}, img_label: {}, res_label: {}, img_url: {}'
-                  .format(img_idx, img_label, res_label, img_url))
-            write_line(out1_file_path, "{}\t{}\t{}".format(img_url, img_label, res_label))
-        write_line(out2_file_path, "{}\t{}".format(img_url, res_label))
+        res1_label = DatasetOperation.predict_danjing(img_url)
+        res2_label = DatasetOperation.predict_v1(img_url)
+        if res1_label != img_label or res2_label != img_label:
+            print('[Info] img_idx: {}, img_label: {}, res1_label: {}, res2_label: {}, img_url: {}'
+                  .format(img_idx, img_label, res1_label, res2_label, img_url))
+            write_line(out1_file_path, "{}\t{}\t{}\t{}".format(img_url, img_label, res1_label, res2_label))
         if img_idx % 100 == 0:
             print('[Info] img_idx: {}'.format(img_idx))
-        # except Exception as e:
-        #     print('[Error] e: {}'.format(e))
-        #     print('[Error] img_idx: {}, img_url: {}'.format(img_idx, img_url))
 
     def process(self):
         print('[Info] 文本名称: {}'.format(self.file_path))
@@ -75,12 +71,11 @@ class DatasetOperation(object):
         for img_idx, data_line in enumerate(data_lines):
             items = data_line.split("\t")
             img_url, img_label = items
-            # DatasetOperation.process_line(img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path)
-            pool.apply_async(DatasetOperation.process_line,
-                             (img_idx, img_url, img_label, self.out1_file_path, self.out2_file_path))
+            # DatasetOperation.process_line(img_idx, img_url, img_label, self.out1_file_path)
+            pool.apply_async(DatasetOperation.process_line, (img_idx, img_url, img_label, self.out_file_path))
         pool.close()
         pool.join()
-        print('[Info] 处理完成: {}'.format(self.out2_file_path))
+        print('[Info] 处理完成: {}'.format(self.out_file_path))
 
 
 def main():
