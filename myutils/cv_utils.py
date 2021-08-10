@@ -629,7 +629,7 @@ def merge_two_imgs(img1, img2):
     return large_img
 
 
-def rotate_img_with_bound(img_np, angle):
+def rotate_img_with_bound(img_np, angle, border_value=(0, 0, 0)):
     """
     旋转图像角度
     注意angle是顺时针还是逆时针
@@ -656,7 +656,7 @@ def rotate_img_with_bound(img_np, angle):
     M[0, 2] += (nW / 2) - cX
     M[1, 2] += (nH / 2) - cY
     # perform the actual rotation and return the image
-    img_rotated = cv2.warpAffine(img_np, M, (nW, nH))
+    img_rotated = cv2.warpAffine(img_np, M, (nW, nH), borderValue=border_value)
     return img_rotated, M
 
 
