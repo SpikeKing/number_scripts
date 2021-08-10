@@ -13,7 +13,7 @@ from root_dir import DATA_DIR
 class ResultsChecker(object):
     def __init__(self):
         # file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-20210803181749.txt"
-        file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-20210803181749.txt"
+        file_name = "relabeled.out-20210809094605.txt"
         self.file_name = os.path.join(DATA_DIR, "numbers_files", file_name)
         self.out_file = os.path.join(DATA_DIR, "vs-{}.html".format(get_current_time_str()))
 
@@ -22,8 +22,8 @@ class ResultsChecker(object):
         print('[Info] 样本数: {}'.format(len(data_lines)))
         out_lines = []
         for data_line in data_lines:
-            res1, res2, img_url = data_line.split(",")
-            out_lines.append([res1, res2, img_url])
+            items = data_line.split("\t")
+            out_lines.append(items)
         make_html_page(self.out_file, out_lines)
         print('[Info] 输出: {}'.format(self.out_file))
 
