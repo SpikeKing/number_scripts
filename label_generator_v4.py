@@ -156,13 +156,14 @@ class LabelGeneratorV4(object):
     @staticmethod
     def process_line(img_idx, img_url, img_label, angle_range, out_file):
         _, img_bgr = download_url_img(img_url)
-        angle = random.randint(angle_range * (-1), angle_range)
-        img_bgr, _ = rotate_img_with_bound(img_bgr, angle, border_value=(255, 255, 255))
-        img_bgr = LabelGeneratorV4.get_center_img(img_bgr)
-        img_name = img_url.split("/")[-1].split(".")[0]
-        img_name_new = "{}-{}.jpg".format(img_name, angle)
-        img_url_new = LabelGeneratorV4.save_img_path(img_bgr, img_name_new)
-        write_line(out_file, "{}\t{}".format(img_url_new, img_label))
+        for i in range(10):
+            angle = random.randint(angle_range * (-1), angle_range)
+            img_bgr, _ = rotate_img_with_bound(img_bgr, angle, border_value=(255, 255, 255))
+            img_bgr = LabelGeneratorV4.get_center_img(img_bgr)
+            img_name = img_url.split("/")[-1].split(".")[0]
+            img_name_new = "{}-angle-{}.jpg".format(img_name, angle)
+            img_url_new = LabelGeneratorV4.save_img_path(img_bgr, img_name_new)
+            write_line(out_file, "{}\t{}".format(img_url_new, img_label))
         print('[Info] 处理完成: {}'.format(img_idx))
 
     def process_v1(self):
