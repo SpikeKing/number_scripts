@@ -17,7 +17,7 @@ class DatasetOperation(object):
     清洗数据集
     """
     def __init__(self):
-        self.file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v2_train.txt')
+        self.file_path = os.path.join(DATA_DIR, 'numbers_files', 'clean_hw_numbers_v3_train-new.txt')
         time_str = get_current_time_str()
         self.out_file_path = os.path.join(DATA_DIR, 'numbers_files', 'relabeled.out-{}.txt'.format(time_str))
 
