@@ -53,9 +53,8 @@ class DatasetOperation(object):
 
     @staticmethod
     def process_line(img_idx, img_url, img_label, out1_file_path):
-        # try:
-        res1_label = DatasetOperation.predict_danjing(img_url)
-        res2_label = DatasetOperation.predict_v1(img_url)
+        res1_label = DatasetOperation.predict_v1(img_url)
+        res2_label = DatasetOperation.predict_v1_1(img_url)
         if res1_label != img_label or res2_label != img_label:
             print('[Info] img_idx: {}, img_label: {}, res1_label: {}, res2_label: {}, img_url: {}'
                   .format(img_idx, img_label, res1_label, res2_label, img_url))

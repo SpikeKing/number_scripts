@@ -234,13 +234,16 @@ def merge_files(folder, merge_file):
                     outfile.write(line)
 
 
-def random_pick(some_list, probabilities):
+def random_pick(some_list, probabilities=None):
     """
     根据概率随机获取元素
     :param some_list: 元素列表
     :param probabilities: 概率列表
     :return: 当前元素
     """
+    if not probabilities:
+        probabilities = [float(1) / float(len(some_list))] * len(some_list)
+
     x = random.uniform(0, 1)
     cumulative_probability = 0.0
     item = some_list[0]

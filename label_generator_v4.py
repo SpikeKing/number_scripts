@@ -4,11 +4,11 @@
 Copyright (c) 2021. All rights reserved.
 Created by C. L. Wang on 2.8.21
 """
+from multiprocessing.pool import Pool
 from urllib.parse import unquote
 
 import pandas
 
-from multiprocessing.pool import Pool
 from myutils.cv_utils import *
 from myutils.project_utils import *
 from root_dir import DATA_DIR
@@ -102,6 +102,7 @@ class LabelGeneratorV4(object):
         data = pandas.read_csv(file_path)
         print("[Info] 样本数: {}".format(data.shape[0]))
         image_label_dict = dict()
+        r_count = 0
         for idx, data_row in data.iterrows():
             data_info = json.loads(data_row["问题内容"])
             label_info = json.loads(data_row["回答内容"])
@@ -116,9 +117,12 @@ class LabelGeneratorV4(object):
                 label_idx = int(radio_1.split(",")[0])
                 if label_idx <= 2:
                     res_label = img_label[label_idx]
+                if label_idx == 0:
+                    r_count += 1
             image_label_dict[img_url] = res_label
         print('[Info] 清洗之后样本数: {}'.format(len(image_label_dict.keys())))
         print('[Info] ' + "-" * 50)
+        print('[Info] r_count: {}'.format(r_count))
         return image_label_dict
 
     @staticmethod
@@ -185,7 +189,7 @@ class LabelGeneratorV4(object):
 
 def main():
     lg = LabelGeneratorV4()
-    lg.process_v1()
+    lg.process()
 
 
 if __name__ == '__main__':

@@ -152,14 +152,14 @@ class LabelGeneratorV2(object):
 
     @staticmethod
     def merge_files():
-        file1_path = os.path.join(DATA_DIR, 'numbers_files', "hw_numbers_check_tmp1.txt")
-        file2_path = os.path.join(DATA_DIR, 'numbers_files', "hw_numbers_check_tmp2.txt")
-        file3_path = os.path.join(DATA_DIR, 'numbers_files', "hw_numbers_check_tmp3.txt")
-        out_file_path = os.path.join(DATA_DIR, 'numbers_files', "hw_numbers_check_2200.txt")
+        file1_path = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v3_train-new.txt")
+        file2_path = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v3_train-20210810163402.txt")
+        out_file_path = os.path.join(DATA_DIR, 'numbers_files', "clean_hw_numbers_v3_train.txt")
 
         out_lines = []
-        for file_path in [file1_path, file2_path, file3_path]:
+        for file_path in [file1_path, file2_path]:
             data_lines = read_file(file_path)
+            print('[Info] data_lines: {}'.format(len(data_lines)))
             out_lines += data_lines
         print('[Info] 样本数: {}'.format(len(out_lines)))
         write_list_to_file(out_file_path, out_lines)
