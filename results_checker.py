@@ -12,9 +12,9 @@ from root_dir import DATA_DIR
 
 class ResultsChecker(object):
     def __init__(self):
-        # file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-20210803181749.txt"
-        file_name = "clean_hw_numbers_v3_train-new.txt"
-        self.file_name = os.path.join(DATA_DIR, "numbers_files", file_name)
+        file_name = "relabeled.out-20210812120943"
+        # self.file_name = os.path.join(DATA_DIR, "numbers_files", file_name)
+        self.file_name = os.path.join(DATA_DIR, file_name + ".txt")
         self.out_file = os.path.join(DATA_DIR, "vs-{}.html".format(get_current_time_str()))
 
     def process(self):
