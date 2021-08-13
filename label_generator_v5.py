@@ -16,8 +16,8 @@ from x_utils.vpf_sevices import get_hw_numbers_service
 class LabelGeneratorV4(object):
     def __init__(self):
         self.folder_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1-raw")
-        self.out_file_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1-raw.check.txt")
-        self.out_html_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1-raw.check.html")
+        self.out_file_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1.urls.txt")
+        # self.out_html_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1-raw.check.html")
 
     @staticmethod
     def get_center_img(img_rgb):
@@ -84,10 +84,11 @@ class LabelGeneratorV4(object):
         # show_img_bgr(img_bgr)
         img_name = "v3_1-{}-{}.jpg".format(p_idx, get_current_day_str())
         img_url = LabelGeneratorV4.save_img_path(img_bgr, img_name)
-        res1 = LabelGeneratorV4.predict_v1(img_url)
-        res2 = LabelGeneratorV4.predict_v1_1(img_url)
-        write_line(out_file, "\t".join([img_url, res1, res2]))
-        print('[Info] img_url: {}, res1: {}, res2: {}'.format(img_url, res1, res2))
+        # res1 = LabelGeneratorV4.predict_v1(img_url)
+        # res2 = LabelGeneratorV4.predict_v1_1(img_url)
+        # write_line(out_file, "\t".join([img_url, res1, res2]))
+        write_line(out_file, img_url)
+        # print('[Info] img_url: {}, res1: {}, res2: {}'.format(img_url, res1, res2))
         print('[Info] 处理完成: {}'.format(p_idx))
 
     def process(self):
@@ -96,21 +97,21 @@ class LabelGeneratorV4(object):
         print('[Info] 样本数: {}'.format(len(paths_list)))
         pool = Pool(processes=40)
         for p_idx, path in enumerate(paths_list):
-            if p_idx == 100:
-                break
+            # if p_idx == 100:
+            #     break
             # LabelGeneratorV4.process_line(p_idx, path, self.out_file_path)
             pool.apply_async(LabelGeneratorV4.process_line, (p_idx, path, self.out_file_path))
         pool.close()
         pool.join()
         print('[Info] 输出: {}'.format(self.out_file_path))
-        data_lines = read_file(self.out_file_path)
-        print('[Info] 检测行数: {}'.format(len(data_lines)))
-        out_lines = []
-        for img_idx, data_line in enumerate(data_lines):
-            items = data_line.split("\t")
-            out_lines.append(items)
-        make_html_page(self.out_html_path, out_lines)
-        print('[Info] 输出: {}'.format(self.out_html_path))
+        # data_lines = read_file(self.out_file_path)
+        # print('[Info] 检测行数: {}'.format(len(data_lines)))
+        # out_lines = []
+        # for img_idx, data_line in enumerate(data_lines):
+        #     items = data_line.split("\t")
+        #     out_lines.append(items)
+        # make_html_page(self.out_html_path, out_lines)
+        # print('[Info] 输出: {}'.format(self.out_html_path))
 
 
 
