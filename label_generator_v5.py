@@ -15,9 +15,9 @@ from x_utils.vpf_sevices import get_hw_numbers_service
 
 class LabelGeneratorV4(object):
     def __init__(self):
-        self.folder_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1")
-        self.out_file_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1.check.txt")
-        self.out_html_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1.check.html")
+        self.folder_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1-raw")
+        self.out_file_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1-raw.check.txt")
+        self.out_html_path = os.path.join(DATA_DIR, "hw-numbers-imgs-v3_1-raw.check.html")
 
     @staticmethod
     def get_center_img(img_rgb):
