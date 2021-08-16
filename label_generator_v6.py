@@ -237,6 +237,7 @@ class LabelGeneratorV6(object):
             # if img_idx == 0:
             #     break
         pool.close()
+        
         pool.join()
         print('[Info] 处理完成: {}'.format(out_file_path))
 
