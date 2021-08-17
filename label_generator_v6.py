@@ -237,14 +237,26 @@ class LabelGeneratorV6(object):
             # if img_idx == 0:
             #     break
         pool.close()
-        
+
         pool.join()
         print('[Info] 处理完成: {}'.format(out_file_path))
+
+    def split_file(self):
+        file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_train.txt")
+        out_file_format = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_train.s{}.txt")
+        data_lines = read_file(file_path)
+        n_split = 4
+        gap = len(data_lines) // n_split
+        for i in range(n_split):
+            end = min(i+1*gap, len(data_lines))
+            sub_lines = data_lines[i:end]
+            out_file = out_file_format.format(str(i))
+            write_list_to_file(out_file, sub_lines)
 
 
 def main():
     lg = LabelGeneratorV6()
-    lg.process_v1()
+    lg.split_file()
 
 if __name__ == '__main__':
     main()
