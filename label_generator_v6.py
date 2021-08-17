@@ -19,7 +19,7 @@ class LabelGeneratorV6(object):
         self.file1_path = os.path.join(DATA_DIR, "numbers_files", "1c5f7277-a78b-4637-8143-b8656fc58798_166438.csv")
         self.file2_path = os.path.join(DATA_DIR, "numbers_files", "75d3342e-2fc9-4849-95fb-a5c5b687ada3_166438.csv")
         self.file3_path = os.path.join(DATA_DIR, "numbers_files", 'clean_hw_numbers_v3_train-new.txt')
-        self.out_file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_ori.txt")
+        self.out_file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_1_ori.txt")
 
     @staticmethod
     def get_center_img(img_rgb):
@@ -61,7 +61,7 @@ class LabelGeneratorV6(object):
         """
         from x_utils.oss_utils import save_img_2_oss
         if not oss_root_dir:
-            oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v4/"
+            oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v4_1/"
         img_url = save_img_2_oss(img_bgr, img_name, oss_root_dir)
         # img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
         #                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
@@ -171,26 +171,27 @@ class LabelGeneratorV6(object):
         image_label_dict1 = self.process_file(self.file1_path)
         image_label_dict2 = self.process_file_v2(self.file2_path)
         err_count = 0
+
         image_label_dict12 = dict()
         for image_url in image_label_dict2.keys():
             label1 = image_label_dict1[image_url]
             label2 = image_label_dict2[image_url]
             if label1 != label2:
                 err_count += 1
-                # print('[Info] label1: {}, label2: {}, url: {}'.format(label1, label2, image_url))
             else:
                 image_label_dict12[image_url] = label1
         print('[Info] 样本总数: {}, error_count: {}'.format(len(image_label_dict2.keys()), err_count))
         print('[Info] 正确样本数: {}'.format(len(image_label_dict12.keys())))
 
-        image_label_dict3 = self.process_file_ex(self.file3_path)
-        image_label_dict_re = dict(image_label_dict3, **image_label_dict12)
-        print('[Info] 样本总数: {}'.format(len(image_label_dict_re.keys())))
+        # image_label_dict3 = self.process_file_ex(self.file3_path)
+        # image_label_dict_re = dict(image_label_dict3, **image_label_dict12)
+        # print('[Info] 样本总数: {}'.format(len(image_label_dict_re.keys())))
 
         out_list = []
-        for image_url in image_label_dict_re.keys():
-            img_label = image_label_dict_re[image_url]
+        for image_url in image_label_dict12.keys():
+            img_label = image_label_dict12[image_url]
             out_list.append('{}\t{}'.format(image_url, img_label))
+
         random.seed(47)
         random.shuffle(out_list)
         write_list_to_file(self.out_file_path, out_list)
@@ -222,9 +223,9 @@ class LabelGeneratorV6(object):
         print('[Info] 处理完成: {}'.format(img_idx))
 
     def process_v1(self):
-        file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_ori.txt")
+        file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_1_ori.txt")
         out_file_path = os.path.join(
-            DATA_DIR, "numbers_files", "clean_hw_numbers_v4_train-{}.txt".format(get_current_time_str()))
+            DATA_DIR, "numbers_files", "clean_hw_numbers_v4_1_train-{}.txt".format(get_current_time_str()))
         print('[Info] file_path: {}'.format(file_path))
         image_label_dict = self.process_file_ex(file_path)
         print('[Info] 样本数: {}'.format(len(image_label_dict.keys())))
@@ -237,7 +238,6 @@ class LabelGeneratorV6(object):
             # if img_idx == 0:
             #     break
         pool.close()
-
         pool.join()
         print('[Info] 处理完成: {}'.format(out_file_path))
 
@@ -256,7 +256,8 @@ class LabelGeneratorV6(object):
 
 def main():
     lg = LabelGeneratorV6()
-    lg.split_file()
+    lg.process_v1()
+
 
 if __name__ == '__main__':
     main()
