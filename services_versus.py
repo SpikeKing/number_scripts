@@ -18,8 +18,8 @@ class ServicesVersus(object):
     """
     def __init__(self):
         # file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-20210803150735"
-        file_name = "hw_numbers_check_2200"
-        # file_name = "clean_hw_numbers_v4_ori"
+        # file_name = "hw_numbers_check_2200"
+        file_name = "“hw_numbers_check_v2_2000”"
         time_str = get_current_time_str()
         self.file_path = os.path.join(DATA_DIR, 'numbers_files', '{}.txt'.format(file_name))
         self.out_file_path = os.path.join(DATA_DIR, 'numbers_files', '{}.vs-{}.txt'.format(file_name, time_str))
@@ -47,15 +47,15 @@ class ServicesVersus(object):
     def process_line(data_idx, img_url, label_str, out_file):
         # try:
         # res1 = ServicesVersus.predict_danjing(img_url)
-        # res2 = ServicesVersus.predict_v1(img_url)
-        res3 = ServicesVersus.predict_v1_1(img_url)
+        res2 = ServicesVersus.predict_v1(img_url)
+        # res3 = ServicesVersus.predict_v1_1(img_url)
         # img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
         #                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
         # if res1 != label_str or res2 != label_str or res3 != label_str:
         #     print('[Info] data_idx: {}, label_str: {}, res1: {}, res2: {}, res3: {}, img_url: {}'
         #           .format(data_idx, label_str, res1, res2, res3, img_url))
         #     write_line(out_file, ",".join([label_str, res1, res2, res3, img_url]))
-        res = res3
+        res = res2
         if res != label_str:
             img_url_show = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
                                            "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")

@@ -224,6 +224,21 @@ class LabelGeneratorV6(object):
         except Exception as e:
             print('[Error] e: {}'.format(e))
 
+    @staticmethod
+    def process_line_v2(img_idx, img_url, img_label, angle_range, out_file):
+        try:
+            write_line(out_file, "{}\t{}".format(img_url, img_label))
+            _, img_bgr_ori = download_url_img(img_url)
+            angle = random.randint(angle_range * (-1), angle_range)
+            img_bgr, _ = rotate_img_with_bound(img_bgr_ori, angle, border_value=(255, 255, 255))
+            img_bgr = LabelGeneratorV6.get_center_img(img_bgr)
+            img_name = img_url.split("/")[-1].split(".")[0]
+            img_name_new = "val-{}.jpg".format(img_name, img_idx)
+            img_url_new = LabelGeneratorV6.save_img_path(img_bgr, img_name_new)
+            write_line(out_file, "{}\t{}".format(img_url_new, img_label))
+        except Exception as e:
+            print('[Error] e: {}'.format(e))
+
     def process_v1(self):
         file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_1_ori.txt")
         out_file_path = os.path.join(
@@ -243,6 +258,26 @@ class LabelGeneratorV6(object):
         pool.join()
         print('[Info] 处理完成: {}'.format(out_file_path))
 
+    def process_val(self):
+        file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_1_ori.txt")
+        out_file_path = os.path.join(
+            DATA_DIR, "numbers_files", "clean_hw_numbers_v4_1_test-{}.txt".format(get_current_time_str()))
+        print('[Info] file_path: {}'.format(file_path))
+        image_label_dict = self.process_file_ex(file_path)
+        print('[Info] 样本数: {}'.format(len(image_label_dict.keys())))
+        angle_range = 15
+        pool = Pool(processes=100)
+        for img_idx, img_url in enumerate(image_label_dict.keys()):
+            if img_idx == 1000:
+                break
+            img_label = image_label_dict[img_url]
+            pool.apply_async(LabelGeneratorV6.process_line_v2,
+                             (img_idx, img_url, img_label, angle_range, out_file_path))
+        pool.close()
+        pool.join()
+        print('[Info] 处理完成: {}'.format(out_file_path))
+
+
     def split_file(self):
         file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_train.txt")
         out_file_format = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_train.s{}.txt")
@@ -258,7 +293,7 @@ class LabelGeneratorV6(object):
 
 def main():
     lg = LabelGeneratorV6()
-    lg.process_v1()
+    lg.process_val()
 
 
 if __name__ == '__main__':
