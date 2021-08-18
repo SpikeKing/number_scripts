@@ -5,19 +5,16 @@ Copyright (c) 2021. All rights reserved.
 Created by C. L. Wang on 10.8.21
 """
 
-def main():
-    from swtloc import SWTLocalizer
-    from swtloc.utils import imgshow
-    import numpy as np
+import cv2
+import os
 
-    swtl = SWTLocalizer()
-    # Stroke Width Transform
-    imgpath = "mydata/v2-20210805-028538.jpg"
-    swtl.swttransform(imgpaths=imgpath, text_mode='lb_df',
-                      save_results=True, save_rootpath='swtres/',
-                      ac_sigma=1.0, gs_blurr=False,
-                      minrsw=3, maxrsw=50, max_angledev=np.pi / 3)
-    imgshow(swtl.swt_labelled3C)
+from root_dir import DATA_DIR
+
+
+def main():
+    img_path = os.path.join(DATA_DIR, 'img.jpg')
+    img_bgr = cv2.imread(img_path)
+
 
 if __name__ == '__main__':
     main()
