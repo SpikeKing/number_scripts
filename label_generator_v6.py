@@ -227,7 +227,7 @@ class LabelGeneratorV6(object):
     @staticmethod
     def process_line_v2(img_idx, img_url, img_label, angle_range, out_file):
         try:
-            write_line(out_file, "{}\t{}".format(img_url, img_label))
+            # write_line(out_file, "{}\t{}".format(img_url, img_label))
             _, img_bgr_ori = download_url_img(img_url)
             angle = random.randint(angle_range * (-1), angle_range)
             img_bgr, _ = rotate_img_with_bound(img_bgr_ori, angle, border_value=(255, 255, 255))
@@ -246,7 +246,7 @@ class LabelGeneratorV6(object):
         print('[Info] file_path: {}'.format(file_path))
         image_label_dict = self.process_file_ex(file_path)
         print('[Info] 样本数: {}'.format(len(image_label_dict.keys())))
-        angle_range = 15
+        angle_range = 5
         pool = Pool(processes=100)
         for img_idx, img_url in enumerate(image_label_dict.keys()):
             img_label = image_label_dict[img_url]
