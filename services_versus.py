@@ -44,10 +44,16 @@ class ServicesVersus(object):
         return ocr_text
 
     @staticmethod
+    def predict_online(img_url):
+        res_dict = get_hw_numbers_service(img_url, service_name="LcfC3ATXgDBFWkGMtkQV77")
+        ocr_text = res_dict['data']['ocr_text']
+        return ocr_text
+
+    @staticmethod
     def process_line(data_idx, img_url, label_str, out_file):
         # try:
-        # res1 = ServicesVersus.predict_danjing(img_url)
-        res2 = ServicesVersus.predict_v1(img_url)
+        res1 = ServicesVersus.predict_online(img_url)
+        # res2 = ServicesVersus.predict_v1(img_url)
         # res3 = ServicesVersus.predict_v1_1(img_url)
         # img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
         #                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
@@ -55,7 +61,7 @@ class ServicesVersus(object):
         #     print('[Info] data_idx: {}, label_str: {}, res1: {}, res2: {}, res3: {}, img_url: {}'
         #           .format(data_idx, label_str, res1, res2, res3, img_url))
         #     write_line(out_file, ",".join([label_str, res1, res2, res3, img_url]))
-        res = res2
+        res = res1
         if res != label_str:
             img_url_show = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
                                            "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
