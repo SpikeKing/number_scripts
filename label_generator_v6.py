@@ -61,7 +61,7 @@ class LabelGeneratorV6(object):
         """
         from x_utils.oss_utils import save_img_2_oss
         if not oss_root_dir:
-            oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v4_1/"
+            oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v4_2/"
         img_url = save_img_2_oss(img_bgr, img_name, oss_root_dir)
         # img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
         #                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
@@ -202,7 +202,11 @@ class LabelGeneratorV6(object):
         try:
             write_line(out_file, "{}\t{}".format(img_url, img_label))
             _, img_bgr_ori = download_url_img(img_url)
-            for i in range(2):
+
+            if img_label in [">", "<", "7", "="]:
+                angle_range = 3
+
+            for i in range(5):
                 angle = random.randint(angle_range * (-1), angle_range)
                 img_bgr, _ = rotate_img_with_bound(img_bgr_ori, angle, border_value=(255, 255, 255))
                 img_bgr = LabelGeneratorV6.get_center_img(img_bgr)
@@ -240,13 +244,13 @@ class LabelGeneratorV6(object):
             print('[Error] e: {}'.format(e))
 
     def process_v1(self):
-        file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_1_ori.txt")
+        file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_ori.txt")
         out_file_path = os.path.join(
-            DATA_DIR, "numbers_files", "clean_hw_numbers_v4_1_train-{}.txt".format(get_current_time_str()))
+            DATA_DIR, "numbers_files", "clean_hw_numbers_v4_2_train-{}.txt".format(get_current_time_str()))
         print('[Info] file_path: {}'.format(file_path))
         image_label_dict = self.process_file_ex(file_path)
         print('[Info] 样本数: {}'.format(len(image_label_dict.keys())))
-        angle_range = 5
+        angle_range = 15
         pool = Pool(processes=100)
         for img_idx, img_url in enumerate(image_label_dict.keys()):
             img_label = image_label_dict[img_url]
@@ -277,7 +281,6 @@ class LabelGeneratorV6(object):
         pool.join()
         print('[Info] 处理完成: {}'.format(out_file_path))
 
-
     def split_file(self):
         file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_train.txt")
         out_file_format = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_train.s{}.txt")
@@ -293,7 +296,7 @@ class LabelGeneratorV6(object):
 
 def main():
     lg = LabelGeneratorV6()
-    lg.process_val()
+    lg.process_v1()
 
 
 if __name__ == '__main__':
