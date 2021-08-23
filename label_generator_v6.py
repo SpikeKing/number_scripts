@@ -62,7 +62,7 @@ class LabelGeneratorV6(object):
         """
         from x_utils.oss_utils import save_img_2_oss
         if not oss_root_dir:
-            oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v4_2/"
+            oss_root_dir = "zhengsheng.wcl/Character-Detection/datasets/hw-numbers-imgs-v4_3x/"
         img_url = save_img_2_oss(img_bgr, img_name, oss_root_dir)
         # img_url = img_url.replace("http://quark-cv-data.oss-cn-hangzhou.aliyuncs.com",
         #                           "https://quark-cv-data.oss-cn-hangzhou.alibaba-inc.com")
@@ -202,8 +202,13 @@ class LabelGeneratorV6(object):
     @staticmethod
     def process_line(img_idx, img_url, img_label, angle_range, out_file):
         try:
-            write_line(out_file, "{}\t{}".format(img_url, img_label))
             _, img_bgr_ori = download_url_img(img_url)
+            img_name = img_url.split("/")[-1].split(".")[0]
+
+            img_bgr = LabelGeneratorV6.get_center_img(img_bgr_ori)
+            img_name_new = "{}-ori.jpg".format(img_name)
+            img_url_new = LabelGeneratorV6.save_img_path(img_bgr, img_name_new)
+            write_line(out_file, "{}\t{}".format(img_url_new, img_label))
 
             if img_label in [">", "<", "7", "="]:
                 angle_range = 1
@@ -212,7 +217,6 @@ class LabelGeneratorV6(object):
                 angle = random.randint(angle_range * (-1), angle_range)
                 img_bgr, _ = rotate_img_with_bound(img_bgr_ori, angle, border_value=(255, 255, 255))
                 img_bgr = LabelGeneratorV6.get_center_img(img_bgr)
-                img_name = img_url.split("/")[-1].split(".")[0]
                 img_name_new = "{}-angle-{}.jpg".format(img_name, angle)
                 img_url_new = LabelGeneratorV6.save_img_path(img_bgr, img_name_new)
                 write_line(out_file, "{}\t{}".format(img_url_new, img_label))
@@ -222,7 +226,6 @@ class LabelGeneratorV6(object):
                 y_size = round(random.uniform(0.7, 1.3), 1)
                 img_bgr = cv2.resize(img_bgr_ori, None, fx=x_size, fy=y_size)
                 img_bgr = LabelGeneratorV6.get_center_img(img_bgr)
-                img_name = img_url.split("/")[-1].split(".")[0]
                 img_name_new = "{}-size-{}x{}.jpg".format(img_name, x_size, y_size)
                 img_url_new = LabelGeneratorV6.save_img_path(img_bgr, img_name_new)
                 write_line(out_file, "{}\t{}".format(img_url_new, img_label))
