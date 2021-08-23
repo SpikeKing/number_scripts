@@ -19,8 +19,9 @@ class ServicesVersus(object):
     def __init__(self):
         # file_name = "a2e455ff-b77b-4f65-ae59-864cfa20bdd8_166274.out-20210803112232.vs-20210803150735"
         # file_name = "hw_numbers_check_2200"
-        file_name = "hw_numbers_check_v2_1000"
+        # file_name = "hw_numbers_check_v2_1000"
         # file_name = "hw_numbers_symbol_check"
+        file_name = "clean_hw_numbers_v4_1_err"
         time_str = get_current_time_str()
         self.file_path = os.path.join(DATA_DIR, 'numbers_files', '{}.txt'.format(file_name))
         self.out_file_path = os.path.join(DATA_DIR, 'numbers_files', '{}.vs-{}.txt'.format(file_name, time_str))
