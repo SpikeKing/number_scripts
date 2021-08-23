@@ -282,10 +282,10 @@ class LabelGeneratorV6(object):
         print('[Info] 处理完成: {}'.format(out_file_path))
 
     def split_file(self):
-        file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_train.txt")
-        out_file_format = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_train.s{}.txt")
+        file_path = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_2_train.txt")
+        out_file_format = os.path.join(DATA_DIR, "numbers_files", "clean_hw_numbers_v4_2_train.s{}.txt")
         data_lines = read_file(file_path)
-        n_split = 4
+        n_split = 3
         gap = len(data_lines) // n_split
         for i in range(n_split):
             end = min(i+1*gap, len(data_lines))
@@ -296,7 +296,7 @@ class LabelGeneratorV6(object):
 
 def main():
     lg = LabelGeneratorV6()
-    lg.process_v1()
+    lg.split_file()
 
 
 if __name__ == '__main__':
